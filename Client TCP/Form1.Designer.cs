@@ -38,6 +38,10 @@
             txtLog = new RichTextBox();
             btnSend = new Button();
             txtMessage = new TextBox();
+            label3 = new Label();
+            label4 = new Label();
+            txtFolder = new TextBox();
+            txtFilter = new TextBox();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             SuspendLayout();
             // 
@@ -53,7 +57,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(281, 26);
+            label2.Location = new Point(256, 19);
             label2.Name = "label2";
             label2.Size = new Size(115, 15);
             label2.TabIndex = 1;
@@ -71,7 +75,7 @@
             // txtIP
             // 
             txtIP.FormattingEnabled = true;
-            txtIP.Location = new Point(423, 25);
+            txtIP.Location = new Point(377, 12);
             txtIP.Name = "txtIP";
             txtIP.Size = new Size(121, 23);
             txtIP.TabIndex = 3;
@@ -79,7 +83,7 @@
             // 
             // btnConnect
             // 
-            btnConnect.Location = new Point(163, 80);
+            btnConnect.Location = new Point(121, 63);
             btnConnect.Name = "btnConnect";
             btnConnect.Size = new Size(75, 23);
             btnConnect.TabIndex = 4;
@@ -89,7 +93,7 @@
             // 
             // btnDisconnect
             // 
-            btnDisconnect.Location = new Point(281, 80);
+            btnDisconnect.Location = new Point(256, 63);
             btnDisconnect.Name = "btnDisconnect";
             btnDisconnect.Size = new Size(75, 23);
             btnDisconnect.TabIndex = 5;
@@ -99,7 +103,7 @@
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(77, 133);
+            lblStatus.Location = new Point(77, 109);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(122, 15);
             lblStatus.TabIndex = 6;
@@ -107,7 +111,7 @@
             // 
             // txtLog
             // 
-            txtLog.Location = new Point(77, 172);
+            txtLog.Location = new Point(77, 288);
             txtLog.Name = "txtLog";
             txtLog.ReadOnly = true;
             txtLog.Size = new Size(352, 96);
@@ -116,7 +120,7 @@
             // 
             // btnSend
             // 
-            btnSend.Location = new Point(347, 335);
+            btnSend.Location = new Point(321, 401);
             btnSend.Name = "btnSend";
             btnSend.Size = new Size(75, 23);
             btnSend.TabIndex = 8;
@@ -126,16 +130,54 @@
             // 
             // txtMessage
             // 
-            txtMessage.Location = new Point(140, 335);
+            txtMessage.Location = new Point(97, 402);
             txtMessage.Name = "txtMessage";
             txtMessage.Size = new Size(187, 23);
             txtMessage.TabIndex = 9;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(79, 160);
+            label3.Name = "label3";
+            label3.Size = new Size(95, 15);
+            label3.TabIndex = 10;
+            label3.Text = "Folder Following";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(79, 193);
+            label4.Name = "label4";
+            label4.Size = new Size(67, 15);
+            label4.TabIndex = 11;
+            label4.Text = "Apply Filter";
+            // 
+            // txtFolder
+            // 
+            txtFolder.Location = new Point(188, 157);
+            txtFolder.Name = "txtFolder";
+            txtFolder.ReadOnly = true;
+            txtFolder.Size = new Size(175, 23);
+            txtFolder.TabIndex = 12;
+            // 
+            // txtFilter
+            // 
+            txtFilter.Location = new Point(188, 193);
+            txtFilter.Name = "txtFilter";
+            txtFilter.ReadOnly = true;
+            txtFilter.Size = new Size(175, 23);
+            txtFilter.TabIndex = 13;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(txtFilter);
+            Controls.Add(txtFolder);
+            Controls.Add(label4);
+            Controls.Add(label3);
             Controls.Add(txtMessage);
             Controls.Add(btnSend);
             Controls.Add(txtLog);
@@ -165,5 +207,9 @@
         private RichTextBox txtLog;
         private Button btnSend;
         private TextBox txtMessage;
+        private Label label3;
+        private Label label4;
+        private TextBox txtFolder;
+        private TextBox txtFilter;
     }
 }
