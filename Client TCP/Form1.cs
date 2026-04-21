@@ -10,6 +10,8 @@ namespace Client_TCP
         {
             InitializeComponent();
         }
+        //==============Client=============
+        //khoi tao
         Socket sckClient;
         FileSystemWatcher watcher;
         private void btnConnect_Click(object sender, EventArgs e)
@@ -72,8 +74,8 @@ namespace Client_TCP
             //tạo filesystemwatcher
             watcher = new FileSystemWatcher(); // đã khai bao bên ngoài
             watcher.Path = folderPath;
-            //Chỉ watcher cho các file
-            watcher.Filter = ".";
+            //watcher cho tất cả các file
+            watcher.Filter = "*.*";
             //Đăng ký event
             watcher.Changed += new FileSystemEventHandler(OnChanged);
             watcher.Created += new FileSystemEventHandler(OnChanged);
@@ -84,38 +86,49 @@ namespace Client_TCP
             watcher.EnableRaisingEvents = true;
 
             //Hiện thị lên giao diện client
-            lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] { "Dang giam sat..."});
-            txtFolder.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] {"Dang giam sat!" + folderPath});
+            lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] { "Dang giam sat..." });
+            txtFolder.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Dang giam sat: " + folderPath });
         }
 
         //Hàm xử lý sự kiện đổi tên,..
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            // lay thoi gian thuc
-            string realTime = DateTime.Now.ToString("dd/MM/yyyy,HH:mm:ss");
-            //Tạp chuỗi thông báo để gửi cho server
-            string msgLog = $"{realTime}|RENAMED|{e.OldFullPath} to {e.FullPath}";
-            //Send cho server thông báo
-            //byte[] 
-            byte[] sendData = Encoding.ASCII.GetBytes(msgLog);
-            sckClient.Send(sendData);
-            //Hiện thị lên giao diện log client
-            txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Sent to the server: " + msgLog });
+            // lay duoi file vua thay doi .txt
+            string fileLast = Path.GetExtension(e.FullPath).ToLower();
+            if (filtersAr.Contains(fileLast))
+            {
+                // lay thoi gian thuc
+                string realTime = DateTime.Now.ToString("dd/MM/yyyy,HH:mm:ss");
+                //Tạp chuỗi thông báo để gửi cho server
+                string msgLog = $"{realTime}|RENAMED|{e.OldFullPath} to {e.FullPath}";
+                //Send cho server thông báo
+                //byte[] 
+                byte[] sendData = Encoding.ASCII.GetBytes(msgLog);
+                sckClient.Send(sendData);
+                //Hiện thị lên giao diện log client
+                txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Sent to the server: " + msgLog });
+            }
         }
+
 
         //Hàm xử lý sự kiện tạo,xoá,sửa,..
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-            // lay thoi gian thuc
-            string realTime = DateTime.Now.ToString("dd/MM/yyyy,HH:mm:ss");
-            //Tạo chuỗi thông báo để gửi cho server
-            string msgLog = $"{realTime}|{e.ChangeType.ToString().ToUpper()}|{e.FullPath}";
-            //Send cho server thông báo
-            //byte[] 
-            byte[] sendData = Encoding.ASCII.GetBytes(msgLog);
-            sckClient.Send(sendData);
-            //Hiện thị lên giao diện log client
-            txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Sent to the server: " + msgLog });
+            // lay duoi file vua thay doi .txt
+            string fileLast = Path.GetExtension(e.FullPath).ToLower();
+            if (filtersAr.Contains(fileLast))
+            {
+                // lay thoi gian thuc
+                string realTime = DateTime.Now.ToString("dd/MM/yyyy|HH:mm:ss");
+                //Tạo chuỗi thông báo để gửi cho server
+                string msgLog = $"{realTime}|{e.ChangeType.ToString().ToUpper()}|{e.FullPath}";
+                //Send cho server thông báo
+                //byte[] 
+                byte[] sendData = Encoding.ASCII.GetBytes(msgLog);
+                sckClient.Send(sendData);
+                //Hiện thị lên giao diện log client
+                txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Sent to the server: " + msgLog });
+            }
         }
 
         delegate void CapNhatTextBox(string path, string filter);
@@ -141,6 +154,14 @@ namespace Client_TCP
             sckClient.Send(Encoding.ASCII.GetBytes(txtMessage.Text));
             CapNhatNoiDungChat("Client: " + txtMessage.Text);
             txtMessage.Text = ""; //xoa noi dung cua txtbox
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn có chắc muốn xoá log không?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                txtLog.Clear();
+            }
         }
     }
 }

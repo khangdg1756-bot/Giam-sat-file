@@ -294,7 +294,7 @@
             Controls.Add(grpSystem);
             Controls.Add(rtbLog);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Server Mode";
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
             grpSystem.ResumeLayout(false);
             grpSystem.PerformLayout();
