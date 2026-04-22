@@ -50,6 +50,7 @@
             label2 = new Label();
             btnClearLog = new Button();
             btnExportExcel = new Button();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             grpSystem.SuspendLayout();
             grpControl.SuspendLayout();
@@ -75,9 +76,9 @@
             // 
             // btnStartserver
             // 
-            btnStartserver.Location = new Point(251, 36);
+            btnStartserver.Location = new Point(240, 26);
             btnStartserver.Name = "btnStartserver";
-            btnStartserver.Size = new Size(106, 23);
+            btnStartserver.Size = new Size(106, 45);
             btnStartserver.TabIndex = 5;
             btnStartserver.Text = "Start Server";
             btnStartserver.UseVisualStyleBackColor = true;
@@ -85,9 +86,9 @@
             // 
             // btnStart
             // 
-            btnStart.Location = new Point(73, 136);
+            btnStart.Location = new Point(95, 138);
             btnStart.Name = "btnStart";
-            btnStart.Size = new Size(128, 23);
+            btnStart.Size = new Size(106, 45);
             btnStart.TabIndex = 6;
             btnStart.Text = "Start";
             btnStart.UseVisualStyleBackColor = true;
@@ -95,9 +96,9 @@
             // 
             // btnStop
             // 
-            btnStop.Location = new Point(251, 136);
+            btnStop.Location = new Point(240, 138);
             btnStop.Name = "btnStop";
-            btnStop.Size = new Size(128, 23);
+            btnStop.Size = new Size(106, 45);
             btnStop.TabIndex = 7;
             btnStop.Text = "Stop";
             btnStop.UseVisualStyleBackColor = true;
@@ -105,7 +106,7 @@
             // 
             // rtbLog
             // 
-            rtbLog.Location = new Point(35, 372);
+            rtbLog.Location = new Point(35, 407);
             rtbLog.Name = "rtbLog";
             rtbLog.ReadOnly = true;
             rtbLog.ScrollBars = RichTextBoxScrollBars.Vertical;
@@ -124,9 +125,9 @@
             // 
             // btnStopserver
             // 
-            btnStopserver.Location = new Point(395, 36);
+            btnStopserver.Location = new Point(386, 26);
             btnStopserver.Name = "btnStopserver";
-            btnStopserver.Size = new Size(106, 23);
+            btnStopserver.Size = new Size(106, 44);
             btnStopserver.TabIndex = 10;
             btnStopserver.Text = "Stop Server";
             btnStopserver.UseVisualStyleBackColor = true;
@@ -164,14 +165,14 @@
             grpControl.Controls.Add(btnStop);
             grpControl.Controls.Add(chkPdf);
             grpControl.Controls.Add(btnStart);
+            grpControl.Controls.Add(btnBrowse);
             grpControl.Controls.Add(chkDocx);
             grpControl.Controls.Add(chkTxt);
-            grpControl.Controls.Add(btnBrowse);
             grpControl.Controls.Add(txtFolderPath);
             grpControl.Controls.Add(label2);
             grpControl.Location = new Point(35, 179);
             grpControl.Name = "grpControl";
-            grpControl.Size = new Size(520, 174);
+            grpControl.Size = new Size(520, 200);
             grpControl.TabIndex = 13;
             grpControl.TabStop = false;
             grpControl.Text = "Group Control";
@@ -238,9 +239,9 @@
             // 
             // btnBrowse
             // 
-            btnBrowse.Location = new Point(251, 33);
+            btnBrowse.Location = new Point(240, 21);
             btnBrowse.Name = "btnBrowse";
-            btnBrowse.Size = new Size(106, 23);
+            btnBrowse.Size = new Size(106, 45);
             btnBrowse.TabIndex = 3;
             btnBrowse.Text = "Browse";
             btnBrowse.UseVisualStyleBackColor = true;
@@ -265,9 +266,9 @@
             // 
             // btnClearLog
             // 
-            btnClearLog.Location = new Point(108, 554);
+            btnClearLog.Location = new Point(583, 422);
             btnClearLog.Name = "btnClearLog";
-            btnClearLog.Size = new Size(128, 23);
+            btnClearLog.Size = new Size(106, 45);
             btnClearLog.TabIndex = 14;
             btnClearLog.Text = "Clear Log";
             btnClearLog.UseVisualStyleBackColor = true;
@@ -275,19 +276,29 @@
             // 
             // btnExportExcel
             // 
-            btnExportExcel.Location = new Point(286, 554);
+            btnExportExcel.Location = new Point(583, 487);
             btnExportExcel.Name = "btnExportExcel";
-            btnExportExcel.Size = new Size(128, 23);
+            btnExportExcel.Size = new Size(106, 45);
             btnExportExcel.TabIndex = 15;
             btnExportExcel.Text = "Export Log";
             btnExportExcel.UseVisualStyleBackColor = true;
             btnExportExcel.Click += btnExportExcel_Click;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(38, 389);
+            label3.Name = "label3";
+            label3.Size = new Size(68, 15);
+            label3.TabIndex = 16;
+            label3.Text = "System Log";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(910, 612);
+            ClientSize = new Size(910, 661);
+            Controls.Add(label3);
             Controls.Add(btnExportExcel);
             Controls.Add(btnClearLog);
             Controls.Add(grpControl);
@@ -301,6 +312,7 @@
             grpControl.ResumeLayout(false);
             grpControl.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -327,5 +339,6 @@
         private CheckBox chkDocx;
         private Button btnClearLog;
         private Button btnExportExcel;
+        private Label label3;
     }
 }
