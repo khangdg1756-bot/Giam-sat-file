@@ -172,7 +172,7 @@
             txtFilter.Location = new Point(139, 198);
             txtFilter.Name = "txtFilter";
             txtFilter.ReadOnly = true;
-            txtFilter.Size = new Size(150, 23);
+            txtFilter.Size = new Size(368, 23);
             txtFilter.TabIndex = 13;
             // 
             // label5

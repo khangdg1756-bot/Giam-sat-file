@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.IO;
@@ -60,49 +60,78 @@ namespace Server_TCP
         // Ham them log vao RichTextBox
         void AddLog(string action, string path, string time)
         {
-            string date = DateTime.Now.ToString("dd/MM/yyyy");
-            string log = $"[{date} {time}] {action} - {path}\n";
+            string date = DateTime.Now.ToString("dd/MM/yyyy,HH:mm:ss");
+            string log = $"{date},{time}|{action}|{path}\n";
             rtbLog.AppendText(log);
         }
         private void ReceiveCallback(IAsyncResult ar)
         {
-            int size = sckClient.EndReceive(ar);
-            // Xu ly du lieu trong Buffer data
-            string s = Encoding.ASCII.GetString(data, 0, size);
-            // Chen S vao Listbox
-            rtbLog.Invoke(new CapnhatGUI(CapNhatListbox), new object[] { "Client: " + s });
-            // Tach s thanh 3 phan: action, path, time
-            string[] parts = s.Split('|');
-            if (parts.Length == 3)
+            try
             {
-                rtbLog.Invoke(new Action(() =>
+                int size = sckClient.EndReceive(ar);
+                // Xu ly du lieu trong Buffer data
+                string s = Encoding.ASCII.GetString(data, 0, size);
+                // Chen S vao Listbox
+                // rtbLog.Invoke(new CapnhatGUI(CapNhatListbox), new object[] { "Client: " + s });
+                // Tach s thanh 3 phan: action, path, time
+                string[] parts = s.Split('|');
+
+                if (parts.Length == 4 && parts[1] != "RENAMED")
                 {
-                    AddLog(parts[0], parts[1], parts[2]);
-                }));
+                    // CREATE / DELETE / CHANGED
+                    string date = parts[0];
+                    string time = parts[1];
+                    string action = parts[2];
+                    string path = parts[3];
+
+                    rtbLog.Invoke(new Action(() =>
+                    {
+                        string log = $"Client: {date},{time}|{action}|{path}\n";
+                        rtbLog.AppendText(log);
+                    }));
+                }
+                else if (parts.Length >= 3 && parts[1] == "RENAMED")
+                {
+                    // RENAMED giữ nguyên
+                    rtbLog.Invoke(new Action(() =>
+                    {
+                        rtbLog.AppendText("Client: " + s + "\n");
+                    }));
+                }
+
+
+                // Tiep tuc nhan du lieu tu client
+                sckClient.BeginReceive(data, 0, 1024, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
+
+
+
             }
-            // Tiep tuc nhan du lieu tu client
-            sckClient.BeginReceive(data, 0, 1024, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
-
-
-
+            catch (Exception ex)
+            {
+                lblStatus.Invoke(new CapnhatGUI(CapNhatTrangthai), new object[] { "Client disconnected!" });
+                rtbLog.Invoke(new CapnhatGUI(CapNhatListbox), new object[] { "Client disconnected!" });
+            }
         }
-
+        // Cap nhat giao dien tu thread khac
         delegate void CapnhatGUI(string s);
         void CapNhatTrangthai(string s)
         {
             lblStatus.Text = s;
         }
+        // Cap nhat Listbox tu thread khac
         void CapNhatListbox(string s)
         {
             rtbLog.Text += s + "\r\n";
 
 
         }
+        // Cap nhat thong tin client tu thread khac
         void CapNhatClientInfo(string s)
         {
             lblClientInfo.Text = s;
         }
 
+        // Ham stop server
         private void btnStopserver_Click(object sender, EventArgs e)
         {
             if (sckClient != null) sckClient.Close();
@@ -112,6 +141,7 @@ namespace Server_TCP
 
         }
 
+        // Ham Browse folder
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
