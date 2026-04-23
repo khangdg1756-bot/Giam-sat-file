@@ -47,9 +47,19 @@ namespace Client_TCP
                     string[] parts = s.Split('|'); // tách chuỗi
                     string folderPath = parts[1]; // lấy ký tự 2 trong mảng có dạng D:\Download
                     string filter = parts[2]; // lấy ký tự 3 trong mảng có dạng .txt
+
                     //cap nhat giao dien txtFolder va txtFilter
                     txtFolder.Invoke(new CapNhatTextBox(CapNhatNoidungTextBox), new Object[] { folderPath, filter });
                     StartMonitoring(folderPath, filter); //gọi hàm giám sát
+                }
+                else if (s == "STOP") //Nếu nhận lệnh STOP từ server thì ngưng giám sát
+                {
+                    if (watcher != null)
+                    {
+                        watcher.EnableRaisingEvents = false;
+                    }
+                    lblMonitor.Invoke(new CapNhatGUI(CapNhatGiamSat), new Object[] { "Da dung giam sat theo lenh Server!" });
+                    txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Server: STOP MONITORING!" });
                 }
                 else
                 {
@@ -59,7 +69,7 @@ namespace Client_TCP
                 //Tiep tuc cho nhan du lieu
                 sckClient.BeginReceive(data, 0, 1024, SocketFlags.None, new AsyncCallback(Xulydulieunhanduoc), null);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show("Lỗi nạp file: " + ex.Message); }
         }
         string[] filtersAr;
         private void StartMonitoring(string folderPath, string filter)
@@ -86,8 +96,8 @@ namespace Client_TCP
             watcher.EnableRaisingEvents = true;
 
             //Hiện thị lên giao diện client
-            lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] { "Dang giam sat..." });
-            txtFolder.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Dang giam sat: " + folderPath });
+            lblMonitor.Invoke(new CapNhatGUI(CapNhatGiamSat), new Object[] { "Dang giam sat theo yeu cau Server..." });
+            txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "START: " });
         }
 
         //Hàm xử lý sự kiện đổi tên,..
@@ -98,7 +108,7 @@ namespace Client_TCP
             if (filtersAr.Contains(fileLast))
             {
                 // lay thoi gian thuc
-                string realTime = DateTime.Now.ToString("dd/MM/yyyy,HH:mm:ss");
+                string realTime = DateTime.Now.ToString("dd/MM/yyyy|HH:mm:ss");
                 //Tạp chuỗi thông báo để gửi cho server
                 string msgLog = $"{realTime}|RENAMED|{e.OldFullPath} to {e.FullPath}";
                 //Send cho server thông báo
@@ -148,6 +158,10 @@ namespace Client_TCP
         {
             lblStatus.Text = s;
         }
+        void CapNhatGiamSat(string s)
+        {
+            lblMonitor.Text = s;
+        }
 
         private void btnSend_Click(object sender, EventArgs e)
         {
@@ -162,6 +176,12 @@ namespace Client_TCP
             {
                 txtLog.Clear();
             }
+        }
+
+        private void btnDisconnect_Click(object sender, EventArgs e)
+        {
+            if (sckClient != null) sckClient.Close();
+            btnConnect.Enabled = true; btnDisconnect.Enabled = false;
         }
     }
 }
