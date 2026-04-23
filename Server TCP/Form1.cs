@@ -61,7 +61,7 @@ namespace Server_TCP
         void AddLog(string action, string path, string time)
         {
             string date = DateTime.Now.ToString("dd/MM/yyyy,HH:mm:ss");
-            string log = $"{date},{time}|{action}|{path}\n";
+            string log = $"{date}|{time}|{action}|{path}\n";
             rtbLog.AppendText(log);
         }
         private void ReceiveCallback(IAsyncResult ar)
@@ -86,7 +86,7 @@ namespace Server_TCP
 
                     rtbLog.Invoke(new Action(() =>
                     {
-                        string log = $"Client: {date},{time}|{action}|{path}\n";
+                        string log = $"Client: {date}|{time}|{action}|{path}\n";
                         rtbLog.AppendText(log);
                     }));
                 }
@@ -109,7 +109,7 @@ namespace Server_TCP
             catch (Exception ex)
             {
                 lblStatus.Invoke(new CapnhatGUI(CapNhatTrangthai), new object[] { "Client disconnected!" });
-                rtbLog.Invoke(new CapnhatGUI(CapNhatListbox), new object[] { "Client disconnected!" });
+                rtbLog.Invoke(new CapnhatGUI(CapNhatListbox), new object[] { "SERVER STOP!!!" });
             }
         }
         // Cap nhat giao dien tu thread khac
