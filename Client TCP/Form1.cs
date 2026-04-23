@@ -59,7 +59,7 @@ namespace Client_TCP
                 //Tiep tuc cho nhan du lieu
                 sckClient.BeginReceive(data, 0, 1024, SocketFlags.None, new AsyncCallback(Xulydulieunhanduoc), null);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show("Lỗi nạp file: " + ex.Message); }
         }
         string[] filtersAr;
         private void StartMonitoring(string folderPath, string filter)
@@ -162,6 +162,12 @@ namespace Client_TCP
             {
                 txtLog.Clear();
             }
+        }
+
+        private void btnDisconnect_Click(object sender, EventArgs e)
+        {
+            if (sckClient != null) sckClient.Close();
+            btnConnect.Enabled = true; btnDisconnect.Enabled = false;
         }
     }
 }
