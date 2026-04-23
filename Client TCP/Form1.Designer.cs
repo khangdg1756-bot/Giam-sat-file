@@ -118,9 +118,9 @@
             lblStatus.AutoSize = true;
             lblStatus.Location = new Point(9, 71);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(122, 15);
+            lblStatus.Size = new Size(160, 15);
             lblStatus.TabIndex = 6;
-            lblStatus.Text = "Waitting Connected...";
+            lblStatus.Text = "Status: Waitting Connected...\r\n";
             // 
             // txtLog
             // 
