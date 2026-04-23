@@ -72,7 +72,7 @@ namespace Server_TCP
                 // Xu ly du lieu trong Buffer data
                 string s = Encoding.ASCII.GetString(data, 0, size);
                 // Chen S vao Listbox
-                // rtbLog.Invoke(new CapnhatGUI(CapNhatListbox), new object[] { "Client: " + s });
+                //rtbLog.Invoke(new CapnhatGUI(CapNhatListbox), new object[] { "Client: " + s });
                 // Tach s thanh 3 phan: action, path, time
                 string[] parts = s.Split('|');
 
@@ -97,6 +97,11 @@ namespace Server_TCP
                     {
                         rtbLog.AppendText("Client: " + s + "\n");
                     }));
+                }
+                else 
+                {
+                    rtbLog.Invoke(new CapnhatGUI(CapNhatListbox), new object[] { "Client: " + s });
+
                 }
 
 
@@ -134,6 +139,7 @@ namespace Server_TCP
         // Ham stop server
         private void btnStopserver_Click(object sender, EventArgs e)
         {
+            sckClient.Send(Encoding.ASCII.GetBytes("STOP SERVER"));
             if (sckClient != null) sckClient.Close();
             if (sckServer != null) sckServer.Close();
 

@@ -29,7 +29,7 @@ namespace Client_TCP
             sckClient.EndConnect(ar);
             // den day ca ket noi duoc client va server
             // Cap nhat trang thai va nhan du lieu
-            lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] { "Connected Successfully!" });
+            lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] { "Status: Connected Successfully!" });
             //Bat dau nhan du lieu
             sckClient.BeginReceive(data, 0, 1024, SocketFlags.None, new AsyncCallback(Xulydulieunhanduoc), null);
         }
@@ -61,6 +61,13 @@ namespace Client_TCP
                     lblMonitor.Invoke(new CapNhatGUI(CapNhatGiamSat), new Object[] { "Da dung giam sat theo lenh Server!" });
                     txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Server: STOP MONITORING!" });
                 }
+                else if(s =="STOP SERVER")
+                {
+                    watcher.EnableRaisingEvents=false;
+                    if(sckClient != null) sckClient.Close();
+                    txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Server: Stop Server!" });
+                    lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] {"Server Disconnected!"});
+                }    
                 else
                 {
                     //chen s vao trong textbox noi dung chat
@@ -69,7 +76,7 @@ namespace Client_TCP
                 //Tiep tuc cho nhan du lieu
                 sckClient.BeginReceive(data, 0, 1024, SocketFlags.None, new AsyncCallback(Xulydulieunhanduoc), null);
             }
-            catch (Exception ex) { MessageBox.Show("Lỗi nạp file: " + ex.Message); }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "ERROR!"); }
         }
         string[] filtersAr;
         private void StartMonitoring(string folderPath, string filter)
@@ -84,6 +91,17 @@ namespace Client_TCP
             //tạo filesystemwatcher
             watcher = new FileSystemWatcher(); // đã khai bao bên ngoài
             watcher.Path = folderPath;
+            //theo dõi cả tất cả tệp và thư mục
+            watcher.IncludeSubdirectories = true;
+            // 
+            //watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.LastWrite;
+
+            watcher.NotifyFilter = NotifyFilters.FileName      // Bắt tên file (tạo/xóa/đổi tên)
+                         | NotifyFilters.DirectoryName // Bắt tên thư mục
+                         | NotifyFilters.Attributes    // Bắt thay đổi thuộc tính
+                         | NotifyFilters.Size          // Bắt thay đổi kích thước (rất quan trọng cho file .txt)
+                         | NotifyFilters.LastWrite     // Bắt khi nội dung file được ghi xong
+                         | NotifyFilters.CreationTime;
             //watcher cho tất cả các file
             watcher.Filter = "*.*";
             //Đăng ký event
@@ -97,7 +115,7 @@ namespace Client_TCP
 
             //Hiện thị lên giao diện client
             lblMonitor.Invoke(new CapNhatGUI(CapNhatGiamSat), new Object[] { "Dang giam sat theo yeu cau Server..." });
-            txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "START: " });
+            txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "STARTED: " });
         }
 
         //Hàm xử lý sự kiện đổi tên,..
@@ -116,7 +134,7 @@ namespace Client_TCP
                 byte[] sendData = Encoding.ASCII.GetBytes(msgLog);
                 sckClient.Send(sendData);
                 //Hiện thị lên giao diện log client
-                txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Sent to the server: " + msgLog });
+                txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Sent to Server: " + msgLog });
             }
         }
 
@@ -137,7 +155,7 @@ namespace Client_TCP
                 byte[] sendData = Encoding.ASCII.GetBytes(msgLog);
                 sckClient.Send(sendData);
                 //Hiện thị lên giao diện log client
-                txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Sent to the server: " + msgLog });
+                txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Sent to server: " + msgLog });
             }
         }
 
@@ -162,14 +180,14 @@ namespace Client_TCP
         {
             lblMonitor.Text = s;
         }
-
+        //ham gui du lieu
         private void btnSend_Click(object sender, EventArgs e)
         {
             sckClient.Send(Encoding.ASCII.GetBytes(txtMessage.Text));
             CapNhatNoiDungChat("Client: " + txtMessage.Text);
             txtMessage.Text = ""; //xoa noi dung cua txtbox
         }
-
+        // ham xoa du lieu trong log
         private void btnClear_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Bạn có chắc muốn xoá log không?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -177,11 +195,18 @@ namespace Client_TCP
                 txtLog.Clear();
             }
         }
-
+        //ham disconnected
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
+            if (watcher != null)
+            {
+
+                watcher.EnableRaisingEvents = false;
+            }
             if (sckClient != null) sckClient.Close();
-            btnConnect.Enabled = true; btnDisconnect.Enabled = false;
+            //btnConnect.Enabled = true; btnDisconnect.Enabled = false;
+            lblMonitor.Invoke(new CapNhatGUI(CapNhatGiamSat), new Object[] { "Da dung giam sat do disconnected..." });
+            lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] { "Client Disconnected!" });
         }
     }
 }
