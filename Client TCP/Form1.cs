@@ -66,7 +66,8 @@ namespace Client_TCP
                     watcher.EnableRaisingEvents=false;
                     if(sckClient != null) sckClient.Close();
                     txtLog.Invoke(new CapNhatGUI(CapNhatNoiDungChat), new Object[] { "Server: Stop Server!" });
-                    lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] {"Server Disconnected!"});
+                    lblMonitor.Invoke(new CapNhatGUI(CapNhatGiamSat), new Object[] { "Da dung giam sat theo lenh Server!" });
+                    lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] {"Status: Server Disconnected!"});
                 }    
                 else
                 {
@@ -93,17 +94,9 @@ namespace Client_TCP
             watcher.Path = folderPath;
             //theo dõi cả tất cả tệp và thư mục
             watcher.IncludeSubdirectories = true;
-            // 
-            //watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.LastWrite;
-
-            watcher.NotifyFilter = NotifyFilters.FileName      // Bắt tên file (tạo/xóa/đổi tên)
-                         | NotifyFilters.DirectoryName // Bắt tên thư mục
-                         | NotifyFilters.Attributes    // Bắt thay đổi thuộc tính
-                         | NotifyFilters.Size          // Bắt thay đổi kích thước (rất quan trọng cho file .txt)
-                         | NotifyFilters.LastWrite     // Bắt khi nội dung file được ghi xong
-                         | NotifyFilters.CreationTime;
             //watcher cho tất cả các file
             watcher.Filter = "*.*";
+
             //Đăng ký event
             watcher.Changed += new FileSystemEventHandler(OnChanged);
             watcher.Created += new FileSystemEventHandler(OnChanged);
@@ -206,7 +199,7 @@ namespace Client_TCP
             if (sckClient != null) sckClient.Close();
             //btnConnect.Enabled = true; btnDisconnect.Enabled = false;
             lblMonitor.Invoke(new CapNhatGUI(CapNhatGiamSat), new Object[] { "Da dung giam sat do disconnected..." });
-            lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] { "Client Disconnected!" });
+            lblStatus.Invoke(new CapNhatGUI(CapNhatTrangThai), new Object[] { "Status: Client Disconnected!" });
         }
     }
 }
