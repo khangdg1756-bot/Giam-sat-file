@@ -76,7 +76,7 @@ namespace Server_TCP
                 // Tach s thanh 3 phan: action, path, time
                 string[] parts = s.Split('|');
 
-                if (parts.Length == 4 && parts[1] != "RENAMED")
+                if (parts.Length == 4 && parts[2] != "RENAMED")
                 {
                     // CREATE / DELETE / CHANGED
                     string date = parts[0];
@@ -90,7 +90,7 @@ namespace Server_TCP
                         rtbLog.AppendText(log);
                     }));
                 }
-                else if (parts.Length >= 3 && parts[1] == "RENAMED")
+                else if (parts.Length == 4 && parts[2] == "RENAMED")
                 {
                     // RENAMED giữ nguyên
                     rtbLog.Invoke(new Action(() =>
